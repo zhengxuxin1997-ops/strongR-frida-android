@@ -5,6 +5,10 @@ on:
     - cron: "0 9/12 * * *"
   workflow_dispatch:
 
+# 修复“集成无法访问该资源”错误，赋予读写 Release 的权限
+permissions:
+  contents: write
+
 jobs: 
   check_version:
     runs-on: ubuntu-22.04
@@ -58,21 +62,21 @@ jobs:
               }
             }
 
-
   create_release:
     needs: check_version
     runs-on: ubuntu-22.04
     if: needs.check_version.outputs.ALREADY_RELEASE == '0'
 
     steps:
-      - uses: actions/create-release@master
+      # 替换为现代的 release 插件以解决 Node 废弃警告
+      - uses: softprops/action-gh-release@v2
         id: createRelease
         name: Create Runner Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
-          release_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
+          name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           prerelease: false
 
   android_build:
