@@ -78,6 +78,7 @@ jobs:
           tag_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           prerelease: false
+          make_latest: false
 
   android_build:
     runs-on: ubuntu-22.04
