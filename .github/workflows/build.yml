@@ -125,6 +125,7 @@ jobs:
         export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
         git clone --recurse-submodules https://github.com/frida/frida
         cd frida
+        shopt -s nullglob
         for path in ../Patchs/strongR-frida/*
         do
           name=$(basename $path)
@@ -135,6 +136,7 @@ jobs:
           cd ../..
           echo $i
         done
+        shopt -u nullglob
         cd ..
         
         ARCHES="android-arm android-arm64 android-x86 android-x86_64"
