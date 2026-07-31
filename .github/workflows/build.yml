@@ -45,9 +45,11 @@ jobs:
                 tag: releaseVersion
               });
               const {
-                data: { tag_name: ver }
+                data: { tag_name: ver, assets }
               } = releaseResponse;
-              if (ver == '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'){
+              // Only treat as already released if the release exists AND has build assets uploaded.
+              // If assets are missing (e.g. a previous run was interrupted), rebuild and re-upload.
+              if (ver == '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}' && assets && assets.length > 0){
                   core.setOutput('ALREADY_RELEASE', '1');
               }
               else{
